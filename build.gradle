@@ -1,0 +1,54 @@
+group 'com.sample'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+repositories {
+    mavenCentral()
+}
+
+/*mainClassName = "com.sample.WordCount"
+
+jar {
+    manifest {
+        attributes 'Main-Class': "$mainClassName"
+    }
+}*/
+
+dependencies {
+
+    compile 'org.apache.hadoop:hadoop-client:2.6.0'
+    compile 'org.apache.hadoop:hadoop-common:2.6.0'
+    compile 'org.apache.hadoop:hadoop-annotations:2.6.0'
+    compile 'org.projectlombok:lombok:1.16.10'
+    compile 'ch.qos.logback:logback-classic:1.0.13'
+    compile 'org.slf4j:slf4j-jdk14:1.7.5'
+
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+task hadoop(dependsOn: jar, type: Exec) {
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        project.ext.HADOOP_HOME = "$System.env.HADOOP_HOME".replaceAll('\\\\', '/')
+        project.ext.HADOOP_CMD = HADOOP_HOME + '/bin/hadoop.cmd'
+        commandLine 'cmd', '/c', HADOOP_CMD, 'jar', "$jar.archivePath"
+    } else {
+        project.ext.HADOOP_HOME = "/usr/lib/hadoop"
+        project.ext.HADOOP_CMD = HADOOP_HOME + '/bin/hadoop'
+        commandLine HADOOP_CMD, 'jar', "$jar.archivePath"
+    }
+
+    if (project.hasProperty('args')) {
+        args project.args.split('\\s+')
+        args.each { commandLine.push(it) }
+    }
+
+    standardOutput = new ByteArrayOutputStream()
+
+    project.ext.output = {
+        return standardOutput.toString()
+    }
+
+}
