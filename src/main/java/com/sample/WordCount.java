@@ -24,22 +24,22 @@ public class WordCount extends Configured implements Tool {
 
     @Override
     public int run(String[] args) throws Exception {
-//        String in = "hdfs://localhost:9000/tmp/input.txt";
-//        String out = "hdfs://localhost:9000/out/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String in = "hdfs://localhost:9000/tmp/input.txt";
+        String out = "hdfs://localhost:9000/out/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 
         Job job = Job.getInstance(getConf(), "word count");
         Configuration conf = getConf();
-        System.out.println("Conf internal conf value " + conf.get("mapreduce.job.reduces"));
-        System.out.println("Conf new conf value " + conf.get("input.path"));
+        log.info("Conf internal conf value " + conf.get("mapreduce.job.reduces"));
+        log.info("Conf new conf value " + conf.get("input.path"));
         job.setJarByClass(WordCount.class);
         job.setMapperClass(WordCountMapper.class);
         job.setCombinerClass(WordCountReducer.class);
         job.setReducerClass(WordCountReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
-        FileInputFormat.addInputPath(job, new Path(conf.get("input.path","null")));
-        FileOutputFormat.setOutputPath(job, new Path(conf.get("output.path","null")));
-        System.out.println("The output goes to: " + conf.get("output.path","null"));
+        FileInputFormat.addInputPath(job, new Path(conf.get("input.path",in)));
+        FileOutputFormat.setOutputPath(job, new Path(conf.get("output.path",out)));
+        System.out.println("The output goes to: " + conf.get("output.path",out));
         System.exit(job.waitForCompletion(true) ? 0 : 1);
         return 0;
 
