@@ -1,6 +1,10 @@
 # mapreduce-sample
 A sample map reduce job to replicate and play with..
 
+To Build : -  ./gradlew jar
+
+To Run : - hadoop jar build/libs/mapreduce-1.0-SNAPSHOT.jar com.sample.WordCount -Dinput.path=hdfs://localhost:9000/tmp/input.txt -Doutput.path=hdfs://localhost:9000/out/run3
+
 
 Nice Doc for understanding
 
