@@ -1,23 +1,42 @@
 group 'com.sample'
 version '1.0-SNAPSHOT'
 
-apply plugin: 'java'
-apply plugin: 'application'
-
-repositories {
-    mavenCentral()
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+    }
 }
 
-/*mainClassName = "com.sample.WordCount"
+repositories {
+    jcenter()
+    mavenCentral()
+    mavenLocal()
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+mainClassName = "com.sample.WordCount"
 
 jar {
     manifest {
-        attributes 'Main-Class': "$mainClassName"
+        attributes 'Main-Class': mainClassName
     }
-}*/
+}
+
+shadowJar {
+    exclude 'META-INF/*.SF'
+    exclude 'META-INF/*.RSA'
+    exclude 'META-INF/*.RSA'
+    exclude 'META-INF/LICENSE*'
+    exclude 'META-INF/license*'
+}
 
 dependencies {
-
     compile 'org.apache.hadoop:hadoop-client:2.6.0'
     compile 'org.apache.hadoop:hadoop-common:2.6.0'
     compile 'org.apache.hadoop:hadoop-annotations:2.6.0'
