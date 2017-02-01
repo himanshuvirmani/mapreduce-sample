@@ -3,7 +3,10 @@ A sample map reduce job to replicate and play with..
 
 To Build : -  ./gradlew jar
 
-To Run : - hadoop jar build/libs/mapreduce-1.0-SNAPSHOT.jar com.sample.WordCount -Dinput.path=hdfs://localhost:9000/tmp/input.txt -Doutput.path=hdfs://localhost:9000/out/run3
+To Run : - hadoop jar build/libs/mapreduce-1.0-SNAPSHOT.jar -Dinput.path=hdfs://localhost:9000/tmp/input.txt -Doutput.path=hdfs://localhost:9000/out/run3
+
+NOTE :
+Here com.sample.WordCount is added as Main Class Name while creating executable jar. If we give class name, toolrunner does not pick the configuration args. So if you want to give a seperate class name make sure you are not relying on tool runner to get he configs from run time args.
 
 
 Nice Doc for understanding
